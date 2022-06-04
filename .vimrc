@@ -1,4 +1,5 @@
 "this code is used to connect the plugins to the applications
+"new changes in git repository
 call plug#begin()
   "NERDTree
   Plug 'preservim/nerdtree'
