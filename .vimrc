@@ -67,6 +67,3 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-
-"new changes in the vimrc file 12-06-2022
-"this is second change after the first commit
