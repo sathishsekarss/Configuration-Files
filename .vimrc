@@ -44,7 +44,7 @@ set number
 "set's autoindent on
 set autoindent
 
-"this is code helps us to see the changes that are made after editing a file.
+"this is code, which helps us to see the changes that are made after editing a file.
 function! s:DiffWithSaved()
   let filetype=&ft
     diffthis
