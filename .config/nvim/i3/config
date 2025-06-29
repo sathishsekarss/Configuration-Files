@@ -197,3 +197,6 @@ bindcode $mod+h "focus left"
 bindcode $mod+j "focus down"
 bindcode $mod+k "focus up"
 bindcode $mod+l "focus right"
+
+#load the wallpaper by default when the systems starts
+exec_always feh --bg-scale --zoom-fill ~/Downloads/FtureCity.jpg
