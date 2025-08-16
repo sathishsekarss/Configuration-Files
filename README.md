@@ -20,4 +20,4 @@ The vimrc configuration file in this repo can be used for all plugins such Visua
 
 ## Setting vim cursor style for insert and normal mode
 
-Add this configuration to get insert cursor in insert mode and block cursor in normal mode. (https://github.com/sathishsekarss/Configuration-Files/blob/master/.vimrc#L89)
+Add this configuration to get insert cursor in insert mode and block cursor in normal mode. [go to the code](https://github.com/sathishsekarss/Configuration-Files/blob/master/.vimrc#L89)
