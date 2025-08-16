@@ -9,14 +9,15 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
 
 ## Vimrc configuration file
 
-    The vimrc configuration file in this repo can be used for all plugins such Visual studio vim, Jetbrains idea vim, Eclipe vrapper, Nvim etc.  Do note that some configurations may not work in emulated Vim plugins.
+The vimrc configuration file in this repo can be used for all plugins such Visual studio vim, Jetbrains idea vim, Eclipe vrapper, Nvim etc.  Do note that some configurations may not work in emulated Vim plugins.
 
 ## Important vim plugins that I use
 
-    1. Nerdtree
-    2. coc vim for installing language servers
-    3. gruvbox theme
-    4. vim-gitgutter (currently not in use)
+1. Nerdtree
+2. coc vim for installing language servers
+3. gruvbox theme
+4. vim-gitgutter (currently not in use)
 
 ## Setting vim cursor style for insert and normal mode
-    Add this configuration to get insert cursor in insert mode and block cursor in normal mode. (https://github.com/sathishsekarss/Configuration-Files/blob/master/.vimrc#L89)
+
+Add this configuration to get insert cursor in insert mode and block cursor in normal mode. (https://github.com/sathishsekarss/Configuration-Files/blob/master/.vimrc#L89)
