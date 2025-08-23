@@ -8,7 +8,8 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
     - [Setting vim cursor style for insert and normal mode](#setting-vim-cursor-style-for-insert-and-normal-mode)
 2.  I3 TWM
     - [Installation of I3 WM in linux system](#installation-of-i3-wm-in-linux-system)
-
+    - [List of plugins that needs to be used along with I3 to make it better](#list-of-plugins-that-needs-to-be-used-along-with-i3-to-make-it-better)
+    - [Configuring i3 WM manager like vim like](#configuring-i3-wm-manager-like-vim-like)
 
 ## Vimrc configuration file
 
@@ -31,3 +32,16 @@ Add this configuration to get insert cursor in insert mode and block cursor in n
 The I3 Tiling manager can be installed through the linux terminal itself using the basic sudo apt command.
 
 For detailed instructions on how to use I3 Tiling manager always refer to official documentation.
+
+## List of plugins that needs to be used along with I3 to make it better
+
+| Name of the Plugin                                                            | Can it be Installed to Terminal                   |
+|-------------------------------------------------------------------------------|---------------------------------------------------|
+| Rofi (program launcher, also known as dmenu)                                 | Yes, it can be installed through terminal         |
+| Xrandr (mostly prebuilt, used for configuring multiple monitors)             | Not sure                                          |
+
+## Configuring i3 WM manager like vim like
+
+Refer this link to configure i3 WM like vim like
+
+[ Reference link ](https://faq.i3wm.org/question/2294/vim-and-keybinds.1.html)
