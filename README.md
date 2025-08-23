@@ -2,9 +2,12 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
 
 **Table of contents**
 
-1.  [Vimrc configuration files](#vimrc-configuration-file)
-2.  [Important vim plugins that I use](#important-vim-plugins-that-i-use)
-3.  [Setting vim cursor style for insert and normal mode](#setting-vim-cursor-style-for-insert-and-normal-mode)
+1.  vim
+    - [Vimrc configuration files](#vimrc-configuration-file)
+    - [Important vim plugins that I use](#important-vim-plugins-that-i-use)
+    - [Setting vim cursor style for insert and normal mode](#setting-vim-cursor-style-for-insert-and-normal-mode)
+2.  I3 TWM
+    - [Installation of I3 WM in linux system](#installation-of-i3-wm-in-linux-system)
 
 
 ## Vimrc configuration file
@@ -21,3 +24,10 @@ The vimrc configuration file in this repo can be used for all plugins such Visua
 ## Setting vim cursor style for insert and normal mode
 
 Add this configuration to get insert cursor in insert mode and block cursor in normal mode. [go to the code](https://github.com/sathishsekarss/Configuration-Files/blob/master/.vimrc#L89)
+
+
+## Installation of I3 WM in linux system
+
+The I3 Tiling manager can be installed through the linux terminal itself using the basic sudo apt command.
+
+For detailed instructions on how to use I3 Tiling manager always refer to official documentation.
