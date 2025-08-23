@@ -11,6 +11,8 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
     - [List of plugins that needs to be used along with I3 to make it better](#list-of-plugins-that-needs-to-be-used-along-with-i3-to-make-it-better)
     - [Configuring i3 WM manager like vim like](#configuring-i3-wm-manager-like-vim-like)
     - [To modify i3 Status bar](#to-modify-i3-status-bar)
+3.  Bash configurations
+    - [Configuring bash shell with vim](#configuring-bash-shell-with-vim)
 
 ## Vimrc configuration file
 
@@ -54,3 +56,17 @@ Check about i3 block config.  It can be easily installed through sudo apt comman
 [Refernce link](https://vivien.github.io/i3blocks/i3blocks.1.html#_name)
 
 Refer the above link for reference
+
+## Configuring bash shell with vim
+
+set -o vi
+
+Add the above configuration to .bashrc file
+
+[Reference link](https://stackoverflow.com/questions/44534678/how-to-change-cursor-shape-depending-on-vi-mode-in-bash)
+
+Use the above link’s verified answer to change the cursor style in bash
+
+If the inputrc is owned by root user
+
+Then use the “sudo vim inputrc” command to edit the file
