@@ -10,6 +10,7 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
     - [Installation of I3 WM in linux system](#installation-of-i3-wm-in-linux-system)
     - [List of plugins that needs to be used along with I3 to make it better](#list-of-plugins-that-needs-to-be-used-along-with-i3-to-make-it-better)
     - [Configuring i3 WM manager like vim like](#configuring-i3-wm-manager-like-vim-like)
+    - [To modify i3 Status bar](#to-modify-i3-status-bar)
 
 ## Vimrc configuration file
 
@@ -35,7 +36,7 @@ For detailed instructions on how to use I3 Tiling manager always refer to offici
 
 ## List of plugins that needs to be used along with I3 to make it better
 
-| Name of the Plugin                                                            | Can it be Installed to Terminal                   |
+| Name of the Plugin                                                            | Can it be Installed through Terminal                   |
 |-------------------------------------------------------------------------------|---------------------------------------------------|
 | Rofi (program launcher, also known as dmenu)                                 | Yes, it can be installed through terminal         |
 | Xrandr (mostly prebuilt, used for configuring multiple monitors)             | Not sure                                          |
@@ -45,3 +46,11 @@ For detailed instructions on how to use I3 Tiling manager always refer to offici
 Refer this link to configure i3 WM like vim like
 
 [ Reference link ](https://faq.i3wm.org/question/2294/vim-and-keybinds.1.html)
+
+## To modify i3 Status bar
+
+Check about i3 block config.  It can be easily installed through sudo apt command
+
+[Refernce link](https://vivien.github.io/i3blocks/i3blocks.1.html#_name)
+
+Refer the above link for reference
