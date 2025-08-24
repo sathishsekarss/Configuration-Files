@@ -13,6 +13,7 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
     - [To modify i3 Status bar](#to-modify-i3-status-bar)
 3.  Bash configurations
     - [Configuring bash shell with vim](#configuring-bash-shell-with-vim)
+    - [Install ZSH](#install-zsh)
 
 ## Vimrc configuration file
 
@@ -70,3 +71,7 @@ Use the above link’s verified answer to change the cursor style in bash
 If the inputrc is owned by root user
 
 Then use the “sudo vim inputrc” command to edit the file
+
+## Install ZSH
+
+Installing ZSH will prevent vim crashing when launching from the dmenu.
