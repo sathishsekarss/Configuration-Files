@@ -4,6 +4,8 @@ inoremap jk <Esc>
 nnoremap cw ciw
 nnoremap dw diw
 nnoremap vw viw
+nnoremap cu viwu
+nnoremap cU viwU
 nnoremap c" ci"
 nnoremap d" di"
 
