@@ -1,4 +1,5 @@
 	"use strict";
+//This is my person configuration for hyper terminal, specific to windows.  It should be maintained regularly by me 
 // Future versions of Hyper may add additional config options,
 // which will not automatically be merged into this file.
 // See https://hyper.is#cfg for all currently supported options.
