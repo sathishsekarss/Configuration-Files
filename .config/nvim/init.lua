@@ -1,3 +1,4 @@
+"This coniguration is old, new configuration will be updated soon.
 "**SETTING'S RELATED TO KEYBINDINGS**
 inoremap jk <Esc>
 "These remaps are to reduce the object key mapping like ciw, diw and viw, etc.
