@@ -77,3 +77,12 @@ Then use the “sudo vim inputrc” command to edit the file
 ## Install ZSH
 
 Installing ZSH will prevent vim crashing when launching from the dmenu.
+
+## configuring-bash-shell-in-hyper-terminal
+
+For configuring hyper terminal with Shell paste the following config into the config object in .hyper.js file.
+
+shell: 'C:\\Program Files\\Git\\bin\\bash.exe'
+
+
+
