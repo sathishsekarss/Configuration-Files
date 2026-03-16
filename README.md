@@ -14,6 +14,8 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
 3.  Bash configurations
     - [Configuring bash shell with vim](#configuring-bash-shell-with-vim)
     - [Install ZSH](#install-zsh)
+3.  Hyper terminal configuration
+    - [Configuring hyper terminal with bash](#configuring-bash-shell-in-hyper-terminal)
 
 ## Vimrc configuration file
 
