@@ -41,4 +41,6 @@ vim.opt.clipboard = "unnamedplus"
 vim.keymap.set('!', '<C-v>', '<C-r>+')
 -- END: Enabling copy past from system clipboard
 --
+-- START:  Disabled right click menu in nvim
 vim.cmd([[aunmenu PopUp]])
+-- END:  Disabled right click menu in nvim
