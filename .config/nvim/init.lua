@@ -28,6 +28,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'easymotion/vim-easymotion'
 Plug 'sphamba/smear-cursor.nvim'
 Plug 'iamcco/markdown-preview.nvim'
+Plug 'karb94/neoscroll.nvim'
 
 call plug#end()
 ]])
@@ -41,6 +42,18 @@ vim.opt.clipboard = "unnamedplus"
 vim.keymap.set('!', '<C-v>', '<C-r>+')
 -- END: Enabling copy past from system clipboard
 --
--- START:  Disabled right click menu in nvim
 vim.cmd([[aunmenu PopUp]])
--- END:  Disabled right click menu in nvim
+
+--This configuration is for alloing all the color options to airline plugin
+vim.opt.termguicolors = true
+
+-- START: for mapping new scroll default key maps
+require('neoscroll').setup({ mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>'} })
+-- END: for mapping new scroll default key maps
+
+vim.api.nvim_create_autocmd("VimEnter", {
+callback = function()
+      vim.cmd("NERDTree")
+	  vim.cmd("wincmd p")
+	    end
+    })
