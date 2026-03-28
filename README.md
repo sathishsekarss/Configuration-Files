@@ -14,8 +14,10 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
 3.  Bash configurations
     - [Configuring bash shell with vim](#configuring-bash-shell-with-vim)
     - [Install ZSH](#install-zsh)
-3.  Hyper terminal configuration
+4.  Hyper terminal configuration
     - [Configuring hyper terminal with bash](#configuring-bash-shell-in-hyper-terminal)
+5.  Installation of lazy nvim
+    - [installation-of-lazy-nvim](#installation-of-lazy-nvim)
 
 ## Vimrc configuration file
 
@@ -84,5 +86,8 @@ For configuring hyper terminal with Shell paste the following config into the co
 
 shell: 'C:\\Program Files\\Git\\bin\\bash.exe'
 
+## installation-of-lazy-nvim
 
+For installing lazy nvim, go to the official site and then the clone the lazy-nvim repository in appData/local/nvim.
 
+Please take a backup of exisitng nvim folder,  If there is any.
