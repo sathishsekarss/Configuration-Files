@@ -18,7 +18,7 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
     - [Configuring hyper terminal with bash](#configuring-bash-shell-in-hyper-terminal)
 5.  Installation of lazy nvim
     - [installation-of-lazy-nvim](#installation-of-lazy-nvim)
-    - [Adding plugins to lazy vim](#adding-plugings-lazy-vim)
+    - [Adding plugins to lazy vim](#adding-plugins-lazy-vim)
 
 ## Vimrc configuration file
 
@@ -93,6 +93,6 @@ For installing lazy nvim, go to the official site and then the clone the lazy-nv
 
 Please take a backup of exisitng nvim folder,  If there is any.
 
-## adding-plugings-lazy-vim
+## adding-plugins-lazy-vim
 
 Adding plugins to lazy vim.  For easy plug create a new file and paste the contents of the plugin configuration along with return statement inside the file.
