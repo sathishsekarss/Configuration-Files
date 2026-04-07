@@ -20,6 +20,7 @@ return {
       },
     })
 
+    --hide the dot hidden files, showing only the necessary files
     require("nvim-tree").setup({
       filters = {
     --    dotfiles = true, -- Set to true to hide files starting with a dot
@@ -28,11 +29,13 @@ return {
       },
     })
 
+    --open nvim-tree by default
     local function open_nvim_tree()
       require("nvim-tree.api").tree.open()
     end
-    vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 
+    --close the whole nvim application after closing the last opened buffer tab (editor), this prevents from just keeping nvim tree alone open at last
+    vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
     vim.api.nvim_create_autocmd("BufEnter", {
       nested = true,
       callback = function()
