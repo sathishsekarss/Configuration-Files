@@ -19,6 +19,7 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
 5.  Installation of lazy nvim
     - [installation-of-lazy-nvim](#installation-of-lazy-nvim)
     - [Adding plugins to lazy vim](#adding-plugins-lazy-vim)
+    - [Alternative to lazy vim](#alternative-to-lazy-vim)
 
 ## Vimrc configuration file
 
@@ -96,3 +97,11 @@ Please take a backup of exisitng nvim folder,  If there is any.
 ## adding-plugins-lazy-vim
 
 Adding plugins to lazy vim.  For easy plug create a new file and paste the contents of the plugin configuration along with return statement inside the file.
+
+
+## alternative-to-lazy-vim
+Some alternative to lazy vim are
+1. nvchad
+2. astronvim
+3. lunarvim
+These alternatives are very similar to lazy vim.  They provide pre configured nvim setup easy to use.  But for specific OS, Configurations may be required.
