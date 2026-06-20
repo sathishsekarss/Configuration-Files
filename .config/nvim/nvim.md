@@ -7,8 +7,7 @@ Table of contents
 To see the log messages you have to either use
 
 ```
-
-```
 mess or :Noice log
-```
+
+:messages -> this command also work to see the messages
 ```
