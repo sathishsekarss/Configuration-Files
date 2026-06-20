@@ -20,6 +20,7 @@ This documentation doesn't contain information related VIM tutorials.  Instead t
     - [installation-of-lazy-nvim](#installation-of-lazy-nvim)
     - [Adding plugins to lazy vim](#adding-plugins-lazy-vim)
     - [Alternative to lazy vim](#alternative-to-lazy-vim)
+6.  [NeoVim remebers previous file buffer changes](#neoVim-remebers-previous-file-buffer-changes)
 
 ## Vimrc configuration file
 
@@ -105,3 +106,14 @@ Some alternative to lazy vim are
 2. astronvim
 3. lunarvim
 These alternatives are very similar to lazy vim.  They provide pre configured nvim setup easy to use.  But for specific OS, Configurations may be required.
+
+## neoVim-remebers-previous-file-buffer-changes
+Neovim remembers your changes and allows you to undo them after closing a file because persistent undo is enabled in your configuration.
+
+To disable it.  Use the following configuration.
+
+```
+vim.opt.undofile=false -> init.lua, if lua script is used
+
+set noundofile -> init.vim
+```
