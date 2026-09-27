@@ -1,0 +1,249 @@
+import os
+import json
+import base64
+import sqlite3
+from datetime import datetime
+import pandas as pd
+from pydantic import BaseModel, Field
+import openai
+
+# ==========================================
+# 0. SQLITE DATABASE SETUP
+# ==========================================
+
+DB_FILE = "appraisal_system.db"
+
+def init_sqlite_db():
+    """Initializes the SQLite database and creates the required appraisal table if it doesn't exist."""
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS appraisals (
+            report_id TEXT PRIMARY KEY,
+            property_description TEXT,
+            appraised_value REAL,
+            valuation_date TEXT,
+            valuation_method TEXT,
+            capitalization_rate REAL,
+            comparable_sales_references TEXT,
+            is_stale INTEGER,
+            commit_status TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
+# ==========================================
+# 1. SCHEMAS & DATA STRUCTURES
+# ==========================================
+
+class AppraisalRecord(BaseModel):
+    report_id: str = Field(description="Unique report identifier extracted from document (e.g. Apr-46)")
+    property_description: str = Field(description="Summary/location of the property")
+    appraised_value: float = Field(description="Appraised fair market value in numbers")
+    valuation_date: str = Field(description="Valuation date in YYYY-MM-DD format")
+    valuation_method: str = Field(description="Valuation method used (e.g., Income Capitalization, Sales Comparison)")
+    capitalization_rate: float = Field(description="Capitalization rate percentage (0.0 if not applicable)")
+    comparable_sales_references: list[str] = Field(
+        description="List of comparable sales or external document references")
+
+
+REGISTRY_FILE = "sampleRegistryFile.csv"
+
+
+def get_registry_status(report_id: str) -> str:
+    """Tool Call 1: Look up current engagement status from engagement_status_registry.csv"""
+    if not os.path.exists(REGISTRY_FILE):
+        return "registry_not_found"
+
+    df = pd.read_csv(REGISTRY_FILE, dtype={"report_id": str})
+    match = df[df["report_id"] == report_id]
+    if not match.empty:
+        return match.iloc[0]["verified_status"]
+    return "not_found"
+
+
+def commit_record_to_db(record: dict, is_stale: bool) -> str:
+    """Tool Call 2: Persists extracted record to the primary SQLite database."""
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    comps_str = json.dumps(record.get("comparable_sales_references", []))
+
+    cursor.execute("""
+        INSERT OR REPLACE INTO appraisals (
+            report_id, property_description, appraised_value, valuation_date,
+            valuation_method, capitalization_rate, comparable_sales_references,
+            is_stale, commit_status, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        record.get("report_id"),
+        record.get("property_description"),
+        record.get("appraised_value"),
+        record.get("valuation_date"),
+        record.get("valuation_method"),
+        record.get("capitalization_rate"),
+        comps_str,
+        1 if is_stale else 0,
+        "COMMITTED",
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    ))
+
+    conn.commit()
+    conn.close()
+
+    status_msg = f"Successfully committed record {record.get('report_id')} to SQLite DB ({DB_FILE})"
+    print(f"  [TOOL EXECUTION] {status_msg}")
+    return status_msg
+
+
+def generate_reappraisal_order(report_id: str) -> str:
+    """Tool Call 3: Autonomously issues a reappraisal order follow-up"""
+    print(f"  [TOOL EXECUTION] Autonomous Action: Generated reappraisal order for report ID {report_id}.")
+
+    if os.path.exists(REGISTRY_FILE):
+        df = pd.read_csv(REGISTRY_FILE, dtype={"report_id": str})
+        df.loc[df["report_id"] == report_id, "verified_status"] = "reappraisal_ordered"
+        df.to_csv(REGISTRY_FILE, index=False)
+
+    return f"Reappraisal order successfully generated for {report_id}."
+
+
+# ==========================================
+# 2. AGENT ENGINE (OPENAI SDK)
+# ==========================================
+
+class ValuationParsingAgent:
+    def __init__(self, api_key: str, base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/",
+                 staleness_days: int = 365):
+        self.client = openai.OpenAI(
+            api_key=api_key,
+            base_url=base_url
+        )
+        self.staleness_days = staleness_days
+        init_sqlite_db()
+
+    def _encode_file_to_base64(self, file_path: str) -> str:
+        """Helper to read binary files and convert them to Base64 strings."""
+        with open(file_path, "rb") as f:
+            return base64.b64encode(f.read()).decode("utf-8")
+
+    def extract_structured_data(self, file_path: str) -> AppraisalRecord:
+        """Encodes document to Base64 and sends via OpenAI client targeting Gemini endpoint."""
+        print(f"\n[1/4] Ingesting & Extracting via OpenAI Client: {file_path}")
+
+        base64_data = self._encode_file_to_base64(file_path)
+
+        prompt = """
+        Extract structured information from this commercial real estate appraisal report.
+        Return a valid JSON object strictly matching this schema:
+        {
+            "report_id": "string (e.g. Apr-46)",
+            "property_description": "string",
+            "appraised_value": float/number,
+            "valuation_date": "string in YYYY-MM-DD format",
+            "valuation_method": "string",
+            "capitalization_rate": float/number (0.0 if not applicable),
+            "comparable_sales_references": ["array", "of", "strings"]
+        }
+        """
+
+        mime_type = "application/pdf"
+        if file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+            mime_type = f"image/{file_path.split('.')[-1]}"
+
+        response = self.client.chat.completions.create(
+            model="gemini-3.8-flash",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:{mime_type};base64,{base64_data}"
+                            }
+                        }
+                    ]
+                }
+            ],
+            response_format={"type": "json_object"},
+            temperature=0.0
+        )
+
+        raw_json_str = response.choices[0].message.content
+        extracted_dict = json.loads(raw_json_str)
+
+        return AppraisalRecord(**extracted_dict)
+
+    def check_staleness(self, valuation_date_str: str) -> bool:
+        """Determines if the appraisal valuation date exceeds the staleness threshold."""
+        val_date = datetime.strptime(valuation_date_str, "%Y-%m-%d")
+        age_in_days = (datetime.now() - val_date).days
+        return age_in_days > self.staleness_days
+
+    def process_appraisal(self, file_path: str):
+        """Executes the complete agentic pipeline for a single document."""
+        # Step 1: LLM Extraction
+        record = self.extract_structured_data(file_path)
+        record_dict = record.model_dump()
+        print(f"  Extracted Data: {json.dumps(record_dict, indent=2)}")
+
+        # Step 2: Check Appraisal Staleness Threshold
+        print("\n[2/4] Evaluating Appraisal Staleness...")
+        is_stale = self.check_staleness(record.valuation_date)
+        print(f"  Report Date: {record.valuation_date} | Stale: {is_stale}")
+
+        # Step 3: Autonomous Commit to SQLite DB
+        print("\n[3/4] Executing Autonomous Tool Commit to SQLite...")
+        commit_status = commit_record_to_db(record_dict, is_stale)
+
+        # Step 4: Handle Staleness & Reappraisal Workflow
+        if is_stale:
+            print("\n[4/4] Appraisal is stale. Querying Engagement Registry...")
+            current_status = get_registry_status(record.report_id)
+            print(f"  Registry Status for {record.report_id}: '{current_status}'")
+
+            if current_status == "engagement_active":
+                print("  Status is active and report is stale. Triggering reappraisal order tool call...")
+                order_result = generate_reappraisal_order(record.report_id)
+                print(f"  Result: {order_result}")
+            else:
+                print(f"  No reappraisal ordered. Current status '{current_status}' does not warrant order.")
+        else:
+            print("\n[4/4] Report is within valid threshold. No reappraisal needed.")
+
+        return {
+            "record": record_dict,
+            "is_stale": is_stale,
+            "commit_status": commit_status
+        }
+
+
+# ==========================================
+# 3. EXECUTION DRIVER & VERIFICATION
+# ==========================================
+
+if __name__ == "__main__":
+    api_key = no api key
+
+    agent = ValuationParsingAgent(api_key=api_key, staleness_days=365)
+
+    sample_document = "appraisal_documents/Apr-12_appraisal.pdf"
+
+    if os.path.exists(sample_document):
+        agent.process_appraisal(sample_document)
+
+        # Verify saved data in SQLite database
+        print("\n--- Verifying Database Contents ---")
+        conn = sqlite3.connect(DB_FILE)
+        df_db = pd.read_sql_query("SELECT * FROM appraisals", conn)
+        print(df_db.to_string())
+        conn.close()
+    else:
+        print(f"Please place an appraisal report at '{sample_document}' to run.")sd
