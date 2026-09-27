@@ -7,6 +7,7 @@
   --text-main: #0f172a;
   --text-muted: #64748b;
   --success: #16a34a;
+  --readonly-bg: #f1f5f9;
 }
 
 * {
@@ -105,7 +106,6 @@ input[type="file"] { display: none; }
   border-bottom: 1px solid var(--border-color);
 }
 
-/* Left Panel: Preview Frame */
 .preview-box {
   width: 100%;
   height: 100%;
@@ -125,7 +125,6 @@ input[type="file"] { display: none; }
   border: none;
 }
 
-/* Right Panel: Fields Form */
 .form-group {
   margin-bottom: 16px;
 }
@@ -144,6 +143,13 @@ input[type="file"] { display: none; }
   border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 0.95rem;
+}
+
+.readonly-field {
+  background-color: var(--readonly-bg);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  font-weight: 600;
 }
 
 .form-group textarea {
@@ -172,7 +178,23 @@ input[type="file"] { display: none; }
 
 .btn-save:hover { opacity: 0.9; }
 
-/* --- HISTORY TABLE --- */
+/* --- STATUS BADGES --- */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-active { background: #dcfce7; color: #15803d; }
+.badge-ordered { background: #fef3c7; color: #b45309; }
+.badge-superseded { background: #f1f5f9; color: #64748b; }
+.badge-closed { background: #e0f2fe; color: #0369a1; }
+.badge-disposed { background: #ffe4e6; color: #be123c; }
+
+/* --- HISTORY & REGISTRY TABLES --- */
 table {
   width: 100%;
   border-collapse: collapse;

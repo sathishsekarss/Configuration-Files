@@ -13,6 +13,7 @@
     <h1>Property Valuation Survey Parser</h1>
     <nav>
       <button id="nav-upload-btn" class="active" onclick="switchView('upload-view')">Upload & Review</button>
+      <button id="nav-registry-btn" onclick="switchView('registry-view'); fetchRegistry();">Engagement Registry</button>
       <button id="nav-history-btn" onclick="switchView('history-view'); fetchHistory();">History Log</button>
     </nav>
   </header>
@@ -34,7 +35,7 @@
     </div>
 
     <!-- SIDE-BY-SIDE COMPARISON (Initially Hidden) -->
-    <div id="comparison-section" class="comparison-container" style="display: block;">
+    <div id="comparison-section" class="comparison-container" style="display: none;">
       <!-- Left: Document Preview -->
       <div class="panel">
         <div class="panel-header">Uploaded Source Document</div>
@@ -47,6 +48,12 @@
       <div class="panel">
         <div class="panel-header">Extracted Survey Fields (LLM Agent)</div>
         <form id="extraction-form">
+          <!-- Non-Editable Filename Field -->
+          <div class="form-group">
+            <label for="field-filename">Source Filename</label>
+            <input type="text" id="field-filename" readonly class="readonly-field">
+          </div>
+
           <div class="form-group">
             <label for="field-report_id">Report ID</label>
             <input type="text" id="field-report_id" required>
@@ -58,7 +65,7 @@
           </div>
 
           <div class="form-group">
-            <label for="field-appraised_value">Appraised Value (₹)</label>
+            <label for="field-appraised_value">Appraised Value ($)</label>
             <input type="number" step="any" id="field-appraised_value" required>
           </div>
 
@@ -90,13 +97,34 @@
     </div>
   </div>
 
-  <!-- VIEW 2: HISTORY LOG -->
+  <!-- VIEW 2: ENGAGEMENT REGISTRY SCREEN -->
+  <div id="registry-view" class="view-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h2>Engagement Status Registry</h2>
+      <input type="text" id="registry-search" placeholder="Search Report ID or Status..." onkeyup="filterRegistryTable()" style="padding: 8px 12px; width: 260px; border: 1px solid var(--border-color); border-radius: 6px;">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Report ID</th>
+          <th>Verified Status</th>
+          <th>Lifecycle Stage</th>
+        </tr>
+      </thead>
+      <tbody id="registry-table-body">
+        <!-- Rendered dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- VIEW 3: HISTORY LOG -->
   <div id="history-view" class="view-panel">
     <h2>Persisted Records Log</h2>
     <br>
     <table>
       <thead>
         <tr>
+          <th>Filename</th>
           <th>Report ID</th>
           <th>Property Description</th>
           <th>Appraised Value</th>
@@ -107,6 +135,7 @@
         </tr>
       </thead>
       <tbody id="history-table-body">
+        <!-- Rendered dynamically -->
       </tbody>
     </table>
   </div>

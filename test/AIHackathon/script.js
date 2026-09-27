@@ -33,7 +33,7 @@ function handleFileSelect(event) {
 function uploadFile(file) {
   showLoading(true);
 
-  // Render local preview on left side
+  document.getElementById('field-filename').value = file.name;
   renderDocumentPreview(file);
 
   const formData = new FormData();
@@ -48,7 +48,7 @@ function uploadFile(file) {
     return response.json();
   })
   .then(data => {
-    populateFormFields(data);
+    populateFormFields(data, file.name);
     document.querySelector('.upload-container').style.display = 'none';
     document.getElementById('comparison-section').style.display = 'grid';
   })
@@ -60,7 +60,6 @@ function uploadFile(file) {
   });
 }
 
-// --- Render File Preview ---
 function renderDocumentPreview(file) {
   const previewBox = document.getElementById('preview-box');
   previewBox.innerHTML = '';
@@ -83,8 +82,8 @@ function renderDocumentPreview(file) {
   }
 }
 
-// --- Populate Form Fields ---
-function populateFormFields(data) {
+function populateFormFields(data, filename) {
+  document.getElementById('field-filename').value = filename || data.filename || '';
   document.getElementById('field-report_id').value = data.report_id || '';
   document.getElementById('field-property_description').value = data.property_description || '';
   document.getElementById('field-appraised_value').value = data.appraised_value || '';
@@ -104,6 +103,7 @@ function commitExtractedData() {
   const compsArray = compsRaw.split(',').map(item => item.trim()).filter(item => item.length > 0);
 
   const payload = {
+    filename: document.getElementById('field-filename').value,
     report_id: document.getElementById('field-report_id').value,
     property_description: document.getElementById('field-property_description').value,
     appraised_value: parseFloat(document.getElementById('field-appraised_value').value),
@@ -135,7 +135,67 @@ function commitExtractedData() {
   });
 }
 
-// --- API 3: Fetch Historical Records ---
+// --- API 3: Fetch Engagement Registry Data ---
+function fetchRegistry() {
+  showLoading(true);
+
+  fetch('/api/registry')
+  .then(response => response.json())
+  .then(data => {
+    const tbody = document.getElementById('registry-table-body');
+    tbody.innerHTML = '';
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No registry records found.</td></tr>';
+      return;
+    }
+
+    data.forEach(item => {
+      let badgeClass = 'badge-superseded';
+      let stageText = 'Replaced / Outdated';
+
+      if (item.verified_status === 'engagement_active') {
+        badgeClass = 'badge-active';
+        stageText = 'Active Loan Tracking';
+      } else if (item.verified_status === 'reappraisal_ordered') {
+        badgeClass = 'badge-ordered';
+        stageText = 'New Appraisal Pending';
+      } else if (item.verified_status === 'loan_paid_off') {
+        badgeClass = 'badge-closed';
+        stageText = 'Loan Closed';
+      } else if (item.verified_status === 'property_disposed') {
+        badgeClass = 'badge-disposed';
+        stageText = 'Property Offloaded';
+      }
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${item.report_id}</strong></td>
+        <td><span class="badge ${badgeClass}">${item.verified_status}</span></td>
+        <td>${stageText}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(error => {
+    console.error('Error loading engagement registry:', error);
+  })
+  .finally(() => {
+    showLoading(false);
+  });
+}
+
+function filterRegistryTable() {
+  const query = document.getElementById('registry-search').value.toLowerCase();
+  const rows = document.querySelectorAll('#registry-table-body tr');
+
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(query) ? '' : 'none';
+  });
+}
+
+// --- API 4: Fetch Historical Records ---
 function fetchHistory() {
   showLoading(true);
 
@@ -146,7 +206,7 @@ function fetchHistory() {
     tbody.innerHTML = '';
 
     if (data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No records found.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No records found.</td></tr>';
       return;
     }
 
@@ -157,6 +217,7 @@ function fetchHistory() {
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
+        <td><small>${item.filename || 'N/A'}</small></td>
         <td><strong>${item.report_id}</strong></td>
         <td>${item.property_description}</td>
         <td>$${item.appraised_value ? item.appraised_value.toLocaleString() : '0'}</td>
@@ -189,6 +250,8 @@ function switchView(viewId) {
 
   if (viewId === 'upload-view') {
     document.getElementById('nav-upload-btn').classList.add('active');
+  } else if (viewId === 'registry-view') {
+    document.getElementById('nav-registry-btn').classList.add('active');
   } else {
     document.getElementById('nav-history-btn').classList.add('active');
   }
